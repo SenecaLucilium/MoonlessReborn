@@ -1,0 +1,9 @@
+# My own ignores
+*.json
+.vscode/
+
+# Venv libraries
+Include/
+Lib/
+Scripts/
+pyvenv.cfg
