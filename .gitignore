@@ -1,6 +1,8 @@
 # My own ignores
 *.json
 .vscode/
+converter.py
+tgBot.py
 
 # Venv libraries
 Include/
