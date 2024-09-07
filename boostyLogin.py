@@ -19,6 +19,7 @@ def driverInit() -> WebDriver | None:
         # driver = webdriver.Firefox(service=service, options=options)
         return driver
     except Exception as err:
+        print (err)
         return None
 
 def loginAttempt(driver: WebDriver) -> bool:
