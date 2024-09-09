@@ -44,7 +44,7 @@ class BotAPI ():
     @staticmethod
     async def start (update: Update, context: ContextTypes.DEFAULT_TYPE):
         msg = (
-            "Этот бот находится в стадии разработки - альфа версия.\n"
+            "Этот бот находится в стадии разработки. Помните, что вы не можете запрашивать статьи, которым меньше месяца.\n"
             "\n"
             "Бот возвращает статьи в телеграфах (telegra.ph).\n"
             "\n"
@@ -88,11 +88,11 @@ class BotAPI ():
             if len (context.args) != 1:
                 raise ValueError
             
-            telegraph_url = getArticleByUrl (self.driver, context.args[0])
-            if telegraph_url is None:
+            telegraph_urls = getArticleByUrl (self.driver, context.args[0])
+            if telegraph_urls is None:
                 await waitingMessage.edit_text ("Произошла ошибка во время получения статьи.")
             else:
-                await waitingMessage.edit_text (telegraph_url)
+                await waitingMessage.edit_text ('\n'.join(telegraph_urls))
         except ValueError as error:
             await waitingMessage.edit_text ("Корректное использование: /get [url].")
         except Exception as error:
