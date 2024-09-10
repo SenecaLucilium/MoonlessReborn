@@ -3,6 +3,7 @@
 .vscode/
 converter.py
 tgBot.py
+*.log
 
 # Venv libraries
 Include/
