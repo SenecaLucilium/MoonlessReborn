@@ -43,7 +43,7 @@ class BotAPI ():
     @staticmethod
     async def unknown (update: Update, context: ContextTypes.DEFAULT_TYPE):
         try:
-            logger.logger.info(f'Got unknown message from user_id: {context._user_id}, with args: {''.join(context.args)}')
+            logger.logger.info(f"Got unknown message from user_id: {context._user_id}, with args: {''.join(context.args)}")
             msg = (
                 "Неизвестная команда.\n"
                 "Вызовите /help чтобы увидеть список доступных команд."
@@ -59,7 +59,7 @@ class BotAPI ():
     @staticmethod
     async def start (update: Update, context: ContextTypes.DEFAULT_TYPE):
         try:
-            logger.logger.info(f'Got start message from user_id: {context._user_id}, with args: {''.join(context.args)}')
+            logger.logger.info(f"Got start message from user_id: {context._user_id}, with args: {''.join(context.args)}")
             msg = (
                 "Этот бот находится в стадии разработки. Помните, что вы не можете запрашивать статьи, которым меньше месяца.\n"
                 "\n"
@@ -82,7 +82,7 @@ class BotAPI ():
     @staticmethod
     async def help (update: Update, context: ContextTypes.DEFAULT_TYPE):
         try:
-            logger.logger.info(f'Got help message from user_id: {context._user_id}, with args: {''.join(context.args)}')
+            logger.logger.info(f"Got help message from user_id: {context._user_id}, with args: {''.join(context.args)}")
             msg = (
                 "<b>Полный список команд:</b>\n"
                 "\n"
@@ -108,7 +108,7 @@ class BotAPI ():
     
     async def get (self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         try:
-            logger.logger.info(f'Got get message from user_id: {context._user_id}, with args: {''.join(context.args)}')
+            logger.logger.info(f"Got get message from user_id: {context._user_id}, with args: {''.join(context.args)}")
             waitingMessage = await update.effective_message.reply_text("Подождите...")
             
             if len (context.args) != 1:
@@ -133,7 +133,7 @@ class BotAPI ():
     
     async def report (self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         try:
-            logger.logger.info(f'Got report message from user_id: {context._user_id}, with args: {''.join(context.args)}')
+            logger.logger.info(f"Got report message from user_id: {context._user_id}, with args: {''.join(context.args)}")
             if len (context.args) < 0:
                 raise ValueError
             with open('data.json', 'r') as file:
@@ -160,7 +160,7 @@ class BotAPI ():
     
     async def credentials (self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         try:
-            logger.logger.info(f'Got credentials message from user_id: {context._user_id}, with args: {''.join(context.args)}')
+            logger.logger.info(f"Got credentials message from user_id: {context._user_id}, with args: {''.join(context.args)}")
             msg=(
                 "<b>Статьи принадлежат тем, кому они принадлежат.</b>\n"
                 "\n"

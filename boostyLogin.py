@@ -17,12 +17,12 @@ def driverInit() -> WebDriver | None:
     logger.logger.info ('Driver init.')
     try:
         options = Options()
-        # options.add_argument("--headless")
+        options.add_argument("--headless")
         logger.logger.info ('Options for driver init.')
 
-        driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
-        # service = Service(executable_path='/snap/bin/geckodriver')
-        # driver = webdriver.Firefox(service=service, options=options)
+        # driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
+        service = Service(executable_path='/snap/bin/geckodriver')
+        driver = webdriver.Firefox(service=service, options=options)
         logger.logger.info ('Driver instance created.')
         return driver
     except Exception as err:
