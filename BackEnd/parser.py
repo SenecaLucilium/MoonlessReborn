@@ -4,6 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from telegraph import Telegraph
+from datetime import datetime, timedelta
 
 from BackEnd.logger import Logger
 logger = Logger()
@@ -68,7 +69,6 @@ def articleToNodes (html: str):
 
 def nodesToHtml(nodes, max_length=20000):
     def render_node (node):
-        print (node)
         if node['tag'] == 'p':
             return f"<p>{''.join(render_node(child) for child in node.get('children', []))}</p>"
         elif node['tag'] == 'a':
@@ -102,12 +102,40 @@ def nodesToHtml(nodes, max_length=20000):
         html_parts.append(current_part)
     return html_parts
 
+def checkDate (html: str) -> bool | None:
+    try:
+        logger.logger.info (f'Checking date for an article...')
+        date_element = BeautifulSoup(html, 'html.parser').find('span', class_='CreatedAt_headerLink_CEfWB')
+
+        date_str = date_element.text.strip()
+        date_obj = None
+
+        try:
+            date_obj = datetime.strptime(date_str, "%b %d %H:%M")
+            date_obj = date_obj.replace(year=datetime.now().year)
+        except ValueError:
+            date_obj = datetime.strptime(date_str, "%b %d %Y %H:%M")
+        
+        if datetime.now() - date_obj > timedelta(days=30):
+            logger.logger.info ('Correct time.')
+            return True
+        else:
+            logger.logger.warning ('Incorrect time.')
+            return False
+    except Exception as error:
+        logger.logger.info (f'Something went wrong, while checking date with an errror: {error}')
+        return None
+
 def getArticleByUrl (driver: WebDriver, url: str):
     try:
         logger.logger.info (f'Started parsing url: {url}.')
         driver.get (url)
         WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.TAG_NAME, "body")))
         html = driver.page_source
+        
+        date_flag = checkDate(html)
+        if (date_flag is None): raise Exception
+        elif (date_flag is False): raise PermissionError
 
         title = BeautifulSoup(html, 'html.parser').find('h1', class_='Post_title_G2QHp')
         title = title.text if title else "Default Title"
@@ -115,7 +143,6 @@ def getArticleByUrl (driver: WebDriver, url: str):
         author_name = author_name.text if author_name else "Default Author"
         author_url = url.split('/posts')[0]
 
-        # print (title, author_name, author_url)
         logger.logger.info (f'Got info - title: {title}, author: {author_name}, author_url: {author_url}.')
 
         nodes = articleToNodes(html)
@@ -139,6 +166,8 @@ def getArticleByUrl (driver: WebDriver, url: str):
             )
             url_parts.append(response['url'])
         return url_parts
+    except PermissionError as error:
+        raise PermissionError
     except Exception as error:
         logger.logger.error (f'Something went wrong, when getting article by Url with error: {error}')
         return None

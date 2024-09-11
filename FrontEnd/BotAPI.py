@@ -124,6 +124,9 @@ class BotAPI ():
         except ValueError as error:
             logger.logger.error(f'Got ValueError at get handler with error: {error}')
             await waitingMessage.edit_text ("Корректное использование: /get [url].")
+        except PermissionError as error:
+            logger.logger.error(f'Got PermissionError at get handler with error: {error}')
+            await waitingMessage.edit_text ("Нельзя запрашивать статьи, которым меньше месяца.")
         except Exception as error:
             logger.logger.error(f'Something went wrong at get handler with error: {error}')
             await waitingMessage.edit_text ("Произошла неизвестная ошибка.")
