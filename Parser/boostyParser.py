@@ -5,6 +5,8 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
+
+from articleParser import getArticleByHtml
 from BackEnd.articleObject import Article
 from BackEnd.logger import ParserLogger
 
@@ -37,7 +39,13 @@ def getWeekRanges(startDate: datetime, endDate: datetime) -> list:
 # https://boosty.to/bazil.topol?isOnlyAllowedPosts=true&postsFrom=1722459600&postsTo=1724792399
 # https://boosty.to/bazil.topol?isOnlyAllowedPosts=true&postsFrom=1727902800&postsTo=1728075599
 def parseArticleURL(url: str) -> Article:
-    pass
+    try:
+        url = "https://boosty.to" + url
+        DRIVER.get(url)
+        return getArticleByHtml (DRIVER.page_source, url)
+    except Exception as error:
+        LOGGER.error (f'Something went wrong while parsing article: {url} with error: {error}')
+        return None
 
 def parseFeedURL(url: str) -> list:
     try:
@@ -51,7 +59,10 @@ def parseFeedURL(url: str) -> list:
             try:
                 linkElement = article.find('a', class_="Link_defaultStyled_t7118")
                 articleURL = linkElement.get('href')
-                articles.append (parseArticleURL(articleURL))
+
+                articleObj = parseArticleURL(articleURL)
+                if articleObj is not None:
+                    articles.append (articleObj)
             except Exception as error:
                 LOGGER.error (f'Something went wring while parsing article: {article} with error: {error}')
         return articles
@@ -77,6 +88,7 @@ def parsePeriod(startDate: str, endDate: str, driver: WebDriver) -> list:
         for url in generatedURLs:
             parsedArticles.extend (parseFeedURL(url))
         
+        return parsedArticles
         # После того, как ты получил лист всех артиклов (которые содержат ссылки на телеграфы)
         # добавляй их в жисон файл
         LOGGER.info (f'Parsing period ended.')

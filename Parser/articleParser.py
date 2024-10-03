@@ -1,6 +1,7 @@
+from datetime import datetime
 from bs4 import BeautifulSoup
 from telegraph import Telegraph
-
+from BackEnd.articleObject import Article
 from BackEnd.logger import ParserLogger
 LOGGER = ParserLogger()
 
@@ -113,15 +114,26 @@ def nodesToHtml(nodes, max_length=20000):
         LOGGER.error (f'Something went wring while nodesToHtml with error: {error}')
         return None
 
-def getArticleByHtml (html: str, url: str):
+def getArticleByHtml (html: str, url: str) -> Article:
     try:
-        title = BeautifulSoup(html, 'html.parser').find('h1', class_='Post_title_G2QHp')
-        title = title.text if title else "Default Title"
-        author_name = BeautifulSoup(html, 'html.parser').find('div', class_='UserCard_authorName_a8qEj')
-        author_name = author_name.text if author_name else "Default Author"
-        author_url = url.split('/posts')[0]
+        LOGGER.info (f'Parsing Article {url}...')
+        soup = BeautifulSoup (html, 'html.parser')
 
-        LOGGER.info (f'Got info - title: {title}, author: {author_name}, author_url: {author_url}.')
+        name = soup.find('h1', class_='Post_title_G2QHp').text
+        authorName = soup.find('div', class_='UserCard_authorName_a8qEj').text
+        authorURL = url.split('/posts')[0]
+
+        creationDate = soup.find('span', attrs={"class": ["Link_block_f6iQc", "CreatedAt_headerLink_CEfWB"]}).text
+
+        try:
+            creationDate = int(datetime.strptime(creationDate, "%b %d %Y %H:%M").timestamp())
+        except ValueError:
+            creationDate += " 2024"
+            creationDate = int(datetime.strptime(creationDate, "%b %d %H:%M %Y").timestamp())
+        
+        # Где-то тут добавить теги
+
+        LOGGER.info (f'Got info - name: {name}, authorName: {authorName}, authorURL: {authorURL}, creationDate: {creationDate}.')
 
         nodes = articleToNodes(html)
         html_parts = nodesToHtml(nodes)
@@ -130,21 +142,22 @@ def getArticleByHtml (html: str, url: str):
 
         telegraph = Telegraph()
         telegraph.create_account (
-            short_name=author_name,
-            author_name=author_name,
-            author_url=author_url
+            short_name=authorName,
+            author_name=authorName,
+            author_url=authorURL
         )
         url_parts = []
         for html in html_parts:
             LOGGER.info ('Creating telegraph page.')
             response = telegraph.create_page (
-                title=title,
-                author_name=author_name,
-                author_url=author_url,
+                title=name,
+                author_name=authorName,
+                author_url=authorURL,
                 html_content=html
             )
             url_parts.append(response['url'])
-        return url_parts
+        
+        return Article(name, authorName, authorURL, url, creationDate, url_parts)
     except Exception as error:
         LOGGER.error (f'Something went wrong, when getting article by HTML with error: {error}')
         return None

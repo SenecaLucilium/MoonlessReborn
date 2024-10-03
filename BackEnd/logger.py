@@ -9,7 +9,7 @@ class Logger():
         logger = logging.getLogger(__name__)
 
         if not logger.hasHandlers():
-            fileHandler = logging.FileHandler(logFile)
+            fileHandler = logging.FileHandler(logFile,encoding='utf-8')
             logFormat = logging.Formatter('%(levelname)s - %(asctime)s ::: %(message)s')
             fileHandler.setFormatter(logFormat)
 
