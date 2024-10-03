@@ -2,7 +2,7 @@ import logging
 import os
 
 class Logger():
-    def __init__ (self, logFile='app.log'):
+    def __init__ (self, logFile):
         # if os.path.exists(logFile):
         #     os.remove(logFile)
 
@@ -18,3 +18,8 @@ class Logger():
             logger.addHandler(fileHandler)
 
         self.logger = logger
+
+def TGLogger():
+    return Logger('tg.log').logger
+def ParserLogger():
+    return Logger('parser.log').logger
