@@ -1,11 +1,7 @@
 import logging
-import os
 
 class Logger():
     def __init__ (self, logFile):
-        # if os.path.exists(logFile):
-        #     os.remove(logFile)
-
         logger = logging.getLogger(__name__)
 
         if not logger.hasHandlers():
@@ -20,6 +16,6 @@ class Logger():
         self.logger = logger
 
 def TGLogger():
-    return Logger('tg.log').logger
+    return Logger('Data/tg.log').logger
 def ParserLogger():
-    return Logger('parser.log').logger
+    return Logger('Data/parser.log').logger

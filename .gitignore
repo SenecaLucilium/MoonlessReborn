@@ -4,8 +4,6 @@
 converter.py
 tgBot.py
 *.log
-vrem.py
-article.html
 
 # Venv libraries
 Include/

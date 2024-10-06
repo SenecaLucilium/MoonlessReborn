@@ -87,11 +87,8 @@ def parsePeriod(startDate: str, endDate: str, driver: WebDriver) -> list:
         parsedArticles = []
         for url in generatedURLs:
             parsedArticles.extend (parseFeedURL(url))
-        
-        return parsedArticles
-        # После того, как ты получил лист всех артиклов (которые содержат ссылки на телеграфы)
-        # добавляй их в жисон файл
         LOGGER.info (f'Parsing period ended.')
+        return parsedArticles
     except Exception as error:
         LOGGER.error (f'Something went wrong, while parsing period with error: {error}')
         return None
