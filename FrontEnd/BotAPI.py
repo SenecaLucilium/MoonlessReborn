@@ -224,5 +224,3 @@ class BotAPI():
         except Exception as error:
             LOGGER.error(f'Somethin went wrong at credentials handler with error: {error}')
             await update.effective_message.reply_text ("Произошла неизвестная ошибка.")
-
-BotAPI()
