@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 
 from .articleParser import getArticleByHtml
 from BackEnd.articleObject import Article
-from ...BackEnd.logger import ParserLogger
+from BackEnd.logger import ParserLogger
 
 LOGGER = ParserLogger()
 DRIVER = None
