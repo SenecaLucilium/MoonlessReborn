@@ -1,9 +1,9 @@
 import time
 import json
 from datetime import datetime, timedelta
-from boostyParser import parsePeriod
-from boostyLogin import boostyLogin
-from BackEnd.logger import ParserLogger
+from .boostyParser import parsePeriod
+from .boostyLogin import boostyLogin
+from ...BackEnd.logger import ParserLogger
 
 LOGGER = ParserLogger()
 
