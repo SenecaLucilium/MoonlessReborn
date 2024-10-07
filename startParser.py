@@ -1,2 +1,2 @@
-from BackEnd.Parser import startParser
+from BackEnd.Parser.startParser import startParser
 startParser()
