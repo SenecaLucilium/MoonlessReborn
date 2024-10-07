@@ -22,15 +22,18 @@ def startParser():
                 endTime = (now - timedelta(weeks=4)).replace(hour=23, minute=59, second=59, microsecond=0)
                 startTime = endTime - timedelta(weeks=1)
                 LOGGER.info(f'Check period: from {startTime} till {endTime}.')
+
+                with open('Data/articles.json', 'r', encoding='utf-8') as file:
+                    existingArticles = json.load(file)
                 
                 parsedArticles = parsePeriod(startTime.strftime("%d.%m.%Y"), endTime.strftime("%d.%m.%Y"), driver)
 
                 if parsedArticles is not None:
                     articlesDict = [article.__dict__ for article in parsedArticles]
-                    articlesJSON = json.dumps(articlesDict, ensure_ascii=False, indent=4)
+                    existingArticles.extend(articlesDict)
 
-                    with open('Data/articles.json', 'a', encoding='utf-8') as file:
-                        file.write(articlesJSON)
+                    with open('Data/articles.json', 'w', encoding='utf-8') as file:
+                        json.dump(existingArticles, file, ensure_ascii=False, indent=4)
 
                 LOGGER.info('Check ended, now we wait...')
                 nextRunTime = datetime.now().replace(hour=23, minute=59, second=00)
