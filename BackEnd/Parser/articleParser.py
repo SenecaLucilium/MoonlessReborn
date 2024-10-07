@@ -1,8 +1,8 @@
 from datetime import datetime
 from bs4 import BeautifulSoup
 from telegraph import Telegraph
-from ...BackEnd.articleObject import Article
-from ...BackEnd.logger import ParserLogger
+from BackEnd.articleObject import Article
+from BackEnd.logger import ParserLogger
 LOGGER = ParserLogger()
 
 def processElement(element):
