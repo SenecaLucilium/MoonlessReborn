@@ -40,6 +40,7 @@ def getWeekRanges(startDate: datetime, endDate: datetime) -> list:
 # https://boosty.to/bazil.topol?isOnlyAllowedPosts=true&postsFrom=1727902800&postsTo=1728075599
 def parseArticleURL(url: str) -> Article:
     try:
+        LOGGER.info (f'Started parsing article by {url}')
         url = "https://boosty.to" + url
         DRIVER.get(url)
         return getArticleByHtml (DRIVER.page_source, url)
@@ -49,6 +50,7 @@ def parseArticleURL(url: str) -> Article:
 
 def parseFeedURL(url: str) -> list:
     try:
+        LOGGER.info (f'Started parsing feed of {url}')
         DRIVER.get (url)
         WebDriverWait(DRIVER, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "FeedFilter_root_mE0Y_")))
         soup = BeautifulSoup(DRIVER.page_source, 'html.parser')
