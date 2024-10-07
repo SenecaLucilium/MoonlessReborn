@@ -10,7 +10,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 
-from BackEnd.logger import ParserLogger
+from ...BackEnd.logger import ParserLogger
 LOGGER = ParserLogger()
 DATA_JSON = 'Data/data.json'
 
