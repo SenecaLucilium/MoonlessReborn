@@ -3,6 +3,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
+import time
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 
@@ -53,6 +54,7 @@ def parseFeedURL(url: str) -> list:
         LOGGER.info (f'Started parsing feed of {url}')
         DRIVER.get (url)
         WebDriverWait(DRIVER, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "FeedFilter_root_mE0Y_")))
+        time.sleep(10)
         soup = BeautifulSoup(DRIVER.page_source, 'html.parser')
         feed = soup.find ('div', class_="Feed_feed_CvVKF")
 
