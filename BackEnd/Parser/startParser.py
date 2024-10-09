@@ -36,7 +36,8 @@ def startParser():
                         json.dump(existingArticles, file, ensure_ascii=False, indent=4)
 
                 LOGGER.info('Check ended, now we wait...')
-                nextRunTime = datetime.now().replace(hour=23, minute=59, second=00)
+                nextRunTime = datetime.now().replace(hour=23, minute=59, second=59)
+                time.sleep(1) # Для избегания отрицательного слипа
                 time.sleep((nextRunTime - datetime.now()).total_seconds())
 
         except Exception as error:
